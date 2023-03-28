@@ -1,0 +1,19 @@
+{
+  "name": "gql-instaclone",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Msimusi/GQL-Instagram-backend.git"
+  },
+  "keywords": [],
+  "author": "Msimusi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Msimusi/GQL-Instagram-backend/issues"
+  },
+  "homepage": "https://github.com/Msimusi/GQL-Instagram-backend#readme"
+}
