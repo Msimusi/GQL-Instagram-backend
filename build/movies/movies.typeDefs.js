@@ -1,6 +1,5 @@
 import gql from "graphql-tag";
-
-export default gql`
+export default gql `
   type Movie {
     id: Int!
     title: String!

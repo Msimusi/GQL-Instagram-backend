@@ -1,8 +1,21 @@
 {
   "compilerOptions": {
-    "outDir": "./built",
+    "rootDir": "./src",
+    "outDir": "./build",
+    "lib": ["ES2020"],
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    // "preserveValueImports": false,
+    // "allowImportingTsExtensions": true,
+    "esModuleInterop": true,
     "allowJs": true,
-    "target": "es5"
+    "checkJs": true,
+    "types": ["node"],
+    "removeComments": true
+  },
+  "ts-node": {
+    "esm": true
   },
   "include": ["./src/**/*"]
 }
