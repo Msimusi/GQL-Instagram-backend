@@ -10,11 +10,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Movie {
+model User {
   id        Int      @id @default(autoincrement())
-  title     String
-  year      Int
-  genre     String?
+  firstName String
+  lastName  String?
+  userName  String   @unique
+  email     String   @unique
+  password  String
   createdAt DateTime @default(now())
-  UpdatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 }
