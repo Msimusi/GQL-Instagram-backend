@@ -5,8 +5,10 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const loadedTypes = loadFilesSync(`${__dirname}/**/*.typeDefs.{ts,js}`);
-const loadedResolvers = loadFilesSync(`${__dirname}/**/*.{queries,mutations}.{ts,js}`);
-console.log(loadedTypes, loadedResolvers);
+const loadedResolvers = loadFilesSync(
+  `${__dirname}/**/*.{queries,mutations}.{ts,js}`
+);
+
 const typeDefs = mergeTypeDefs(loadedTypes);
 const resolvers = mergeResolvers(loadedResolvers);
 const schema = makeExecutableSchema({ typeDefs, resolvers });
