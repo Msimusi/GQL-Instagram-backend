@@ -1,9 +1,11 @@
 require("dotenv").config();
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import schema from "./schema";
+import schema, { resolvers, typeDefs } from "./schema";
+import { getUser, protectResolver } from "./users/users.utils";
+import client from "./client";
 
-const server = new ApolloServer({ schema });
+const server = new ApolloServer({ resolvers, typeDefs });
 const port: any = process.env.PORT;
 
 // server.listen(PORT).then(() => {
@@ -11,5 +13,13 @@ const port: any = process.env.PORT;
 // });
 
 startStandaloneServer(server, {
+  context: async ({ req }) => {
+    return {
+      loggedInUser: await getUser(req.headers.token),
+      protectResolver,
+      client,
+    };
+  },
+
   listen: { port },
-}).then(({ url }) => console.log(`🚀  Server ready at: ${url}`));
+}).then(({ url }) => console.log(`✅ Server ready at: ${url} 🚀`));

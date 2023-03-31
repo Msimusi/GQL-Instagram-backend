@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "nodemon --exec ts-node ./src/server.ts --ext ts,js",
-    "start": "npm run compile && node ./build/server.js",
+    "start": "npm run compile && nodemon --exec node ./build/server.js",
     "migrate": "npx prisma migrate dev",
     "compile": "tsc"
   },
@@ -32,10 +32,6 @@
     "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.3",
-    "@babel/node": "^7.20.7",
-    "@babel/preset-env": "^7.20.2",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.15.11",
     "nodemon": "^2.0.22",

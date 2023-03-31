@@ -1,38 +1,46 @@
+import { Resolvers } from "../../types";
+import { protectResolver } from "./../users.utils";
 import bcrypt from "bcrypt";
-import client from "../../client";
 
-export default {
+const resolvers: Resolvers = {
   Mutation: {
-    editProfile: async (
-      _,
-      { firstName, lastName, username, email, password: newPassword }
-    ) => {
-      let hashedPassword = null;
-      if (newPassword) {
-        hashedPassword = await bcrypt.hash(newPassword, 10);
-      }
+    editProfile: protectResolver(
+      async (
+        _,
+        { firstName, lastName, username, email, password: newPassword, bio },
+        { loggedInUser, client }
+      ) => {
+        let hashedPassword = null;
 
-      const updatedUser = await client.user.update({
-        where: { id: 1 },
-        data: {
-          firstName,
-          lastName,
-          username,
-          email,
-          ...(hashedPassword && { password: hashedPassword }),
-        },
-      });
+        if (newPassword) {
+          hashedPassword = await bcrypt.hash(newPassword, 10);
+        }
 
-      if (updatedUser.id) {
-        return {
-          ok: true,
-        };
-      } else {
-        return {
-          ok: false,
-          error: "Could not update Profile",
-        };
+        const updatedUser = await client.user.update({
+          where: { id: loggedInUser.id },
+          data: {
+            firstName,
+            lastName,
+            username,
+            email,
+            bio,
+            ...(hashedPassword && { password: hashedPassword }),
+          },
+        });
+
+        if (updatedUser.id) {
+          return {
+            ok: true,
+          };
+        } else {
+          return {
+            ok: false,
+            error: "Could not update Profile",
+          };
+        }
       }
-    },
+    ),
   },
 };
+
+export default resolvers;

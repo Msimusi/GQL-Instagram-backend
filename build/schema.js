@@ -1,15 +1,11 @@
-import { loadFilesSync } from "@graphql-tools/load-files";
-import { mergeTypeDefs, mergeResolvers } from "@graphql-tools/merge";
-import { makeExecutableSchema } from "@graphql-tools/schema";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const loadedTypes = loadFilesSync(`${__dirname}/**/*.typeDefs.{ts,js}`);
-const loadedResolvers = loadFilesSync(
-  `${__dirname}/**/*.{queries,mutations}.{ts,js}`
-);
-
-const typeDefs = mergeTypeDefs(loadedTypes);
-const resolvers = mergeResolvers(loadedResolvers);
-const schema = makeExecutableSchema({ typeDefs, resolvers });
-export default schema;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const load_files_1 = require("@graphql-tools/load-files");
+const merge_1 = require("@graphql-tools/merge");
+const schema_1 = require("@graphql-tools/schema");
+const loadedTypes = (0, load_files_1.loadFilesSync)(`${__dirname}/**/*.typeDefs.{ts,js}`);
+const loadedResolvers = (0, load_files_1.loadFilesSync)(`${__dirname}/**/*.resolvers.ts`);
+const typeDefs = (0, merge_1.mergeTypeDefs)(loadedTypes);
+const resolvers = (0, merge_1.mergeResolvers)(loadedResolvers);
+const schema = (0, schema_1.makeExecutableSchema)({ typeDefs, resolvers });
+exports.default = schema;
