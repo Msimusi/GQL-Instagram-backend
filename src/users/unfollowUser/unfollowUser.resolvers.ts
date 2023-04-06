@@ -1,6 +1,7 @@
+import { Resolvers } from "../../types";
 import { protectResolver } from "../users.utils";
 
-export default {
+const resolvers: Resolvers = {
   Mutation: {
     unfollowUser: protectResolver(
       async (_, { username }, { loggedInUser, client }) => {
@@ -9,20 +10,21 @@ export default {
           return { ok: false, error: "You are trying to unfollow youself." };
         }
 
-        const { following: followingList } = await client.user.findUnique({
-          where: { id: loggedInUser.id },
-          select: {
-            following: {
-              select: {
-                username: true,
-              },
-            },
-          },
-        });
+        const checkFollowing = await client.user
+          .findUnique({ where: { id: loggedInUser.id } })
+          .following({ where: { username } });
 
-        if (!followingList.map((value) => value.username).includes(username)) {
+        if (!checkFollowing || checkFollowing.length === 0) {
           return { ok: false, error: "You are not following the User." };
         }
+
+        // const followingList = await client.user
+        //   .findUnique({ where: { id: loggedInUser.id } })
+        //   .following({ select: { username: true } });
+
+        // if (!followingList.map((value) => value.username).includes(username)) {
+        //   return { ok: false, error: "You are not following the User." };
+        // }
 
         const usernameExist = await client.user.findUnique({
           where: { username },
@@ -52,3 +54,5 @@ export default {
     ),
   },
 };
+
+export default resolvers;
