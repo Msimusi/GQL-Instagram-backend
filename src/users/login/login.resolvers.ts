@@ -21,9 +21,7 @@ const resolvers: Resolvers = {
         return { ok: false, error: "Wrong Password" };
       }
 
-      const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-        expiresIn: "24h",
-      });
+      const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {});
 
       return { ok: true, token };
       // issue a token and send it to the user

@@ -11,23 +11,33 @@ import { resolvers, typeDefs } from "./schema";
 import { getUser, protectResolver } from "./users/users.utils";
 import client from "./client";
 
-const port = process.env.PORT;
+import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.js";
+
+// const graphqlUploadExpress = async () => {
+//   await dynamicImport("graphql-upload/GraphQLUpload.mjs");
+// };
+
 const app = express();
 const httpServer = http.createServer(app);
 
-const server = new ApolloServer({
+const apollo = new ApolloServer({
   resolvers,
   typeDefs,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-server.start().then(() => {
+const startServer = async () => {
+  const port = process.env.PORT;
+
+  await apollo.start();
+
   app.use(logger("dev"));
   app.use(
-    "/",
+    "/graphql",
     cors<cors.CorsRequest>(),
     bodyParser.json(),
-    expressMiddleware(server, {
+    graphqlUploadExpress(),
+    expressMiddleware(apollo, {
       context: async ({ req }) => {
         return {
           loggedInUser: await getUser(req.headers.token),
@@ -37,12 +47,12 @@ server.start().then(() => {
       },
     })
   );
-});
 
-// server.listen(PORT).then(() => {
-//   console.log(`✅ Server is Running on http://localhost:${PORT}/ 🚀`);
-// });
+  // server.listen(PORT).then(() => {
+  //   console.log(`✅ Server is Running on http://localhost:${PORT}/ 🚀`);
+  // });
+  await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
 
-httpServer.listen({ port }, () => {
-  console.log(`✅ Server ready at: http://localhost:${port} 🚀`);
-});
+  console.log(`✅ Server ready at: http://localhost:${port}/graphql 🚀`);
+};
+startServer();
